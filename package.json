@@ -1,0 +1,28 @@
+{
+  "name": "ai-content-factory",
+  "version": "0.1.0",
+  "description": "AI Content Factory - 완전 자동화 멀티채널 콘텐츠 시스템",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "collect": "tsx src/collectors/index.ts",
+    "generate": "tsx src/ai/index.ts",
+    "publish": "tsx src/publishers/index.ts",
+    "pipeline": "tsx src/pipeline.ts",
+    "pipeline:papers": "tsx src/pipeline.ts --papers",
+    "pipeline:full": "tsx src/pipeline.ts --full"
+  },
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@hono/node-server": "^1.0.0",
+    "graphql-request": "^7.0.0",
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsx": "^4.0.0",
+    "@types/node": "^20.0.0"
+  }
+}

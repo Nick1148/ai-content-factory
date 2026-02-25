@@ -1,0 +1,45 @@
+"use client";
+
+import { useState } from "react";
+
+export default function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus("loading");
+    // Mock subscription - will be replaced with actual API
+    setTimeout(() => {
+      setStatus("success");
+      setEmail("");
+    }, 1000);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex w-full max-w-md flex-col gap-3 sm:flex-row">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="your@email.com"
+        required
+        className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500"
+      />
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+      >
+        {status === "loading" ? "..." : "Subscribe"}
+      </button>
+      {status === "success" && (
+        <p className="text-sm text-green-600 dark:text-green-400 sm:absolute sm:mt-12">
+          Successfully subscribed!
+        </p>
+      )}
+    </form>
+  );
+}

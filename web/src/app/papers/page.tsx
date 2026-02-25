@@ -1,0 +1,74 @@
+import { Metadata } from "next";
+import Link from "next/link";
+import { getAllPapers } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "AI Papers - 최신 AI 논문 해설",
+  description:
+    "최신 AI/ML 논문을 한국어로 쉽게 해설합니다. 매일 업데이트되는 AI 논문 리뷰를 확인하세요.",
+};
+
+export default function PapersPage() {
+  const papers = getAllPapers();
+
+  return (
+    <div className="px-4 py-12">
+      <div className="mx-auto max-w-4xl">
+        <div className="mb-12">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+            AI Paper Daily
+          </h1>
+          <p className="mt-3 text-lg text-gray-600 dark:text-gray-400">
+            최신 AI/ML 논문을 한국어로 쉽게 해설합니다
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          {papers.map((paper) => (
+            <Link
+              key={paper.id}
+              href={`/papers/${paper.id}`}
+              className="group block"
+            >
+              <article className="rounded-xl border border-gray-200 bg-white p-6 transition-all hover:border-blue-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-700">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                        {paper.category}
+                      </span>
+                      <time className="text-xs text-gray-500 dark:text-gray-500">
+                        {paper.publishedDate}
+                      </time>
+                    </div>
+                    <h2 className="mt-3 text-lg font-semibold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+                      {paper.title}
+                    </h2>
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                      {paper.authors.join(", ")}
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                      {paper.tldr}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {paper.keyFindings.slice(0, 2).map((finding, i) => (
+                        <span
+                          key={i}
+                          className="rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                        >
+                          {finding.length > 60
+                            ? finding.slice(0, 60) + "..."
+                            : finding}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
