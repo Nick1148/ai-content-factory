@@ -1,5 +1,68 @@
 import { AITool, CategoryInfo, PaperExplanation } from "./types";
 
+// API 연동 유틸리티
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+async function fetchFromAPI<T>(path: string): Promise<T | null> {
+  if (!API_URL) return null;
+  try {
+    const res = await fetch(`${API_URL}${path}`, { next: { revalidate: 3600 } });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+function parseJsonField<T>(value: T | string): T {
+  if (typeof value === "string") {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value as T;
+    }
+  }
+  return value;
+}
+
+function mapToAITool(raw: Record<string, unknown>): AITool {
+  return {
+    slug: String(raw.slug ?? ""),
+    name: String(raw.name ?? ""),
+    tagline: String(raw.tagline ?? ""),
+    description: String(raw.description ?? ""),
+    category: raw.category as AITool["category"],
+    pricing: raw.pricing as AITool["pricing"],
+    url: String(raw.url ?? ""),
+    imageUrl: String(raw.imageUrl ?? raw.image_url ?? ""),
+    rating: Number(raw.rating ?? 0),
+    reviewCount: Number(raw.reviewCount ?? raw.review_count ?? 0),
+    launchDate: String(raw.launchDate ?? raw.launch_date ?? ""),
+    trending: Boolean(raw.trending),
+    featured: Boolean(raw.featured),
+    tags: parseJsonField<string[]>(raw.tags as string[] | string) ?? [],
+    features: parseJsonField<string[]>(raw.features as string[] | string) ?? [],
+    pros: parseJsonField<string[]>(raw.pros as string[] | string) ?? [],
+    cons: parseJsonField<string[]>(raw.cons as string[] | string) ?? [],
+  };
+}
+
+function mapToPaper(raw: Record<string, unknown>): PaperExplanation {
+  return {
+    id: String(raw.id ?? ""),
+    title: String(raw.title ?? ""),
+    tldr: String(raw.tldr ?? ""),
+    summary: String(raw.summary ?? ""),
+    keyFindings: parseJsonField<string[]>((raw.keyFindings ?? raw.key_findings) as string[] | string) ?? [],
+    whyItMatters: String(raw.whyItMatters ?? raw.why_it_matters ?? ""),
+    technicalDetail: String(raw.technicalDetail ?? raw.technical_detail ?? ""),
+    category: String(raw.category ?? ""),
+    arxivUrl: String(raw.arxivUrl ?? raw.arxiv_url ?? ""),
+    publishedDate: String(raw.publishedDate ?? raw.published_date ?? ""),
+    authors: parseJsonField<string[]>(raw.authors as string[] | string) ?? [],
+  };
+}
+
 export const categories: CategoryInfo[] = [
   {
     slug: "text-generation",
@@ -499,11 +562,15 @@ export const papers: PaperExplanation[] = [
   },
 ];
 
-export function getAllPapers(): PaperExplanation[] {
+export async function getAllPapers(): Promise<PaperExplanation[]> {
+  const data = await fetchFromAPI<Record<string, unknown>[]>("/api/papers");
+  if (data) return data.map(mapToPaper);
   return papers;
 }
 
-export function getPaperById(id: string): PaperExplanation | undefined {
+export async function getPaperById(id: string): Promise<PaperExplanation | undefined> {
+  const data = await fetchFromAPI<Record<string, unknown>>(`/api/papers/${id}`);
+  if (data) return mapToPaper(data);
   return papers.find((p) => p.id === id);
 }
 
@@ -511,24 +578,31 @@ export function getAllPaperIds(): string[] {
   return papers.map((p) => p.id);
 }
 
-export function getAllTools(): AITool[] {
+export async function getAllTools(): Promise<AITool[]> {
+  const data = await fetchFromAPI<Record<string, unknown>[]>("/api/tools");
+  if (data) return data.map(mapToAITool);
   return tools;
 }
 
-export function getToolBySlug(slug: string): AITool | undefined {
+export async function getToolBySlug(slug: string): Promise<AITool | undefined> {
+  const data = await fetchFromAPI<Record<string, unknown>>(`/api/tools/${slug}`);
+  if (data) return mapToAITool(data);
   return tools.find((t) => t.slug === slug);
 }
 
-export function getToolsByCategory(category: string): AITool[] {
-  return tools.filter((t) => t.category === category);
+export async function getToolsByCategory(category: string): Promise<AITool[]> {
+  const allTools = await getAllTools();
+  return allTools.filter((t) => t.category === category);
 }
 
-export function getTrendingTools(): AITool[] {
-  return tools.filter((t) => t.trending);
+export async function getTrendingTools(): Promise<AITool[]> {
+  const allTools = await getAllTools();
+  return allTools.filter((t) => t.trending);
 }
 
-export function getFeaturedTools(): AITool[] {
-  return tools.filter((t) => t.featured);
+export async function getFeaturedTools(): Promise<AITool[]> {
+  const allTools = await getAllTools();
+  return allTools.filter((t) => t.featured);
 }
 
 export function getCategoryBySlug(slug: string): CategoryInfo | undefined {

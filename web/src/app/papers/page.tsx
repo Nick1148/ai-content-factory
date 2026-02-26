@@ -8,8 +8,8 @@ export const metadata: Metadata = {
     "최신 AI/ML 논문을 한국어로 쉽게 해설합니다. 매일 업데이트되는 AI 논문 리뷰를 확인하세요.",
 };
 
-export default function PapersPage() {
-  const papers = getAllPapers();
+export default async function PapersPage() {
+  const papers = await getAllPapers();
 
   return (
     <div className="px-4 py-12">

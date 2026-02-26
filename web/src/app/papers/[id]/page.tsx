@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPaperById, getAllPaperIds } from "@/lib/data";
+import { PaperExplanation } from "@/lib/types";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -15,7 +16,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const paper = getPaperById(id);
+  const paper = await getPaperById(id);
   if (!paper) return { title: "Paper Not Found" };
 
   return {
@@ -32,7 +33,7 @@ export async function generateMetadata({
 function JsonLd({
   paper,
 }: {
-  paper: NonNullable<ReturnType<typeof getPaperById>>;
+  paper: PaperExplanation;
 }) {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -57,7 +58,7 @@ function JsonLd({
 
 export default async function PaperDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const paper = getPaperById(id);
+  const paper = await getPaperById(id);
 
   if (!paper) {
     notFound();

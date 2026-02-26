@@ -8,11 +8,11 @@ import {
   getAllTools,
 } from "@/lib/data";
 
-export default function HomePage() {
-  const featuredTools = getFeaturedTools();
-  const trendingTools = getTrendingTools();
+export default async function HomePage() {
+  const featuredTools = await getFeaturedTools();
+  const trendingTools = await getTrendingTools();
   const categories = getAllCategories();
-  const allTools = getAllTools();
+  const allTools = await getAllTools();
 
   return (
     <>

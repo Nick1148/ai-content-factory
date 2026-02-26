@@ -42,7 +42,7 @@ export default async function CategoryPage({ params }: PageProps) {
     notFound();
   }
 
-  const tools = getToolsByCategory(category);
+  const tools = await getToolsByCategory(category);
   const allCategories = getAllCategories();
 
   return (

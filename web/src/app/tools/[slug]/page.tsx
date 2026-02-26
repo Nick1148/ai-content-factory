@@ -7,6 +7,7 @@ import {
   getCategoryBySlug,
   getToolsByCategory,
 } from "@/lib/data";
+import { AITool } from "@/lib/types";
 import ToolCard from "@/components/ToolCard";
 
 interface PageProps {
@@ -21,7 +22,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const tool = getToolBySlug(slug);
+  const tool = await getToolBySlug(slug);
   if (!tool) return { title: "Tool Not Found" };
 
   return {
@@ -35,7 +36,7 @@ export async function generateMetadata({
   };
 }
 
-function JsonLd({ tool }: { tool: NonNullable<ReturnType<typeof getToolBySlug>> }) {
+function JsonLd({ tool }: { tool: AITool }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -67,14 +68,14 @@ function JsonLd({ tool }: { tool: NonNullable<ReturnType<typeof getToolBySlug>> 
 
 export default async function ToolDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const tool = getToolBySlug(slug);
+  const tool = await getToolBySlug(slug);
 
   if (!tool) {
     notFound();
   }
 
   const category = getCategoryBySlug(tool.category);
-  const relatedTools = getToolsByCategory(tool.category).filter(
+  const relatedTools = (await getToolsByCategory(tool.category)).filter(
     (t) => t.slug !== tool.slug
   );
 

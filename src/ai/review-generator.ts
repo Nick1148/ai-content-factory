@@ -32,7 +32,7 @@ export async function generateReview(tool: CollectedTool): Promise<GeneratedRevi
   "cons": ["단점1", "단점2", "단점3"],
   "useCases": ["활용 사례1", "활용 사례2", "활용 사례3"],
   "alternatives": ["대안 도구1", "대안 도구2"],
-  "rating": 8.5,
+  "rating": 4.2,
   "content": "마크다운 형식의 전체 리뷰 글 (800~1500 단어, 한국어)"
 }
 \`\`\`
@@ -42,7 +42,7 @@ export async function generateReview(tool: CollectedTool): Promise<GeneratedRevi
 - 마크다운 형식 사용 (## 제목, **볼드**, - 리스트 등)
 - 800~1500 단어 분량
 - 구성: 도입 -> 핵심 기능 -> 장단점 분석 -> 활용 사례 -> 결론
-- rating은 1.0~10.0 사이 소수점 한 자리까지
+- rating은 1.0~5.0 사이 소수점 한 자리까지 (5점 만점)
 
 JSON만 출력하세요. JSON 외 다른 텍스트는 포함하지 마세요.`;
 
@@ -66,7 +66,7 @@ JSON만 출력하세요. JSON 외 다른 텍스트는 포함하지 마세요.`;
       cons: Array.isArray(parsed.cons) ? parsed.cons : [],
       useCases: Array.isArray(parsed.useCases) ? parsed.useCases : [],
       alternatives: Array.isArray(parsed.alternatives) ? parsed.alternatives : [],
-      rating: typeof parsed.rating === 'number' ? Math.min(10, Math.max(1, parsed.rating)) : 7.0,
+      rating: typeof parsed.rating === 'number' ? Math.min(5, Math.max(1, parsed.rating)) : 3.5,
       content: parsed.content || parsed.summary || '',
     };
   } catch (error) {
