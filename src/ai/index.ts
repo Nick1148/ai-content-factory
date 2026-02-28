@@ -98,7 +98,7 @@ export async function processTools(tools: CollectedTool[]): Promise<ProcessedCon
         platformContents,
       });
 
-      console.log(`  - ${tool.name} 처리 완료 (평점: ${review.rating}/10)`);
+      console.log(`  - ${tool.name} 처리 완료 (평점: ${review.rating}/5)`);
     } catch (error) {
       console.error(`  - ${tool.name} 리뷰 생성 실패:`, error);
     }

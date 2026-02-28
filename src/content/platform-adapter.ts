@@ -5,6 +5,8 @@
 
 import type { GeneratedReview, AdaptedContent, Platform } from './types.js';
 
+const SITE_URL = process.env.SITE_URL || 'https://ai-content-factory.vercel.app';
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -38,7 +40,7 @@ ${review.pros.map((p) => `- ${p}`).join('\n')}
 **단점:**
 ${review.cons.map((c) => `- ${c}`).join('\n')}
 
-**평점: ${review.rating}/10**
+**평점: ${review.rating}/5**
 
 ---
 
@@ -55,7 +57,7 @@ ${review.alternatives.length > 0 ? review.alternatives.map((a) => `- ${a}`).join
     title: review.title,
     content,
     tags,
-    canonicalUrl: `https://medium.com/@ai-content-factory/${slug}`,
+    canonicalUrl: `${SITE_URL}/tools/${slug}`,
     excerpt: review.summary.slice(0, 150),
   };
 }
@@ -74,7 +76,7 @@ tags: ai, devtools, tutorial, productivity
 
 ${review.summary}
 
-**평점: ${review.rating}/10**
+**평점: ${review.rating}/5**
 
 ---
 
@@ -118,7 +120,7 @@ ${review.alternatives.length > 0 ? review.alternatives.map((a) => `- ${a}`).join
     title: review.title,
     content,
     tags: ['ai', 'devtools', 'tutorial', 'productivity'],
-    canonicalUrl: `https://dev.to/ai-content-factory/${slug}`,
+    canonicalUrl: `${SITE_URL}/tools/${slug}`,
     excerpt: review.summary.slice(0, 150),
   };
 }
@@ -173,7 +175,7 @@ ${review.alternatives.length > 0 ? review.alternatives.map((a) => `- **${a}**`).
 
 ## 종합 평가
 
-**평점: ${review.rating}/10**
+**평점: ${review.rating}/5**
 
 ---
 
@@ -183,7 +185,7 @@ ${review.alternatives.length > 0 ? review.alternatives.map((a) => `- **${a}**`).
     title: review.title,
     content,
     tags: ['ai', 'architecture', 'deep-dive', 'developer-tools', 'tech-analysis'],
-    canonicalUrl: `https://hashnode.com/@ai-content-factory/${slug}`,
+    canonicalUrl: `${SITE_URL}/tools/${slug}`,
     excerpt: review.summary.slice(0, 150),
   };
 }
@@ -225,7 +227,7 @@ ${review.alternatives.length > 0 ? review.alternatives.map((a) => `<li><strong>$
 </ul>
 
 <h2>최종 평점</h2>
-<p><strong>${review.rating}/10</strong> - ${review.rating >= 8 ? '강력 추천' : review.rating >= 6 ? '추천' : '보통'}</p>
+<p><strong>${review.rating}/5</strong> - ${review.rating >= 4 ? '강력 추천' : review.rating >= 3 ? '추천' : '보통'}</p>
 
 <p><em>이 리뷰는 AI Content Factory에서 작성되었습니다. 최신 AI 도구 리뷰를 받아보려면 뉴스레터를 구독하세요.</em></p>
 
@@ -239,8 +241,8 @@ ${review.alternatives.length > 0 ? review.alternatives.map((a) => `<li><strong>$
     title: `${review.title} | AI 도구 리뷰 2026`,
     content,
     tags: ['AI 도구', '인공지능', '개발자 도구', 'AI 리뷰', '생산성'],
-    canonicalUrl: `https://example.com/ai-tools/${slug}`,
-    excerpt: `${review.summary.slice(0, 140)}... 평점: ${review.rating}/10`,
+    canonicalUrl: `${SITE_URL}/tools/${slug}`,
+    excerpt: `${review.summary.slice(0, 140)}... 평점: ${review.rating}/5`,
   };
 }
 

@@ -11,10 +11,10 @@ export default function Header() {
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
-                AR
+                CF
               </div>
               <span className="text-lg font-bold text-gray-900 dark:text-white">
-                AI Tool Radar
+                AI Content Factory
               </span>
             </Link>
 
@@ -49,10 +49,16 @@ export default function Header() {
                 Papers
               </Link>
               <Link
-                href="/newsletter"
+                href="/pricing"
                 className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
-                Newsletter
+                Pricing
+              </Link>
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              >
+                Dashboard
               </Link>
             </nav>
           </div>

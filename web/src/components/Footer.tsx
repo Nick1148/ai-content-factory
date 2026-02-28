@@ -11,15 +11,15 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
-                AR
+                CF
               </div>
               <span className="text-lg font-bold text-gray-900 dark:text-white">
-                AI Tool Radar
+                AI Content Factory
               </span>
             </Link>
             <p className="mt-4 max-w-md text-sm text-gray-600 dark:text-gray-400">
-              매일 새로운 AI 도구를 발견하세요. AI Tool Radar는 최신 AI 도구를
-              큐레이션하고 리뷰하여 당신에게 가장 적합한 도구를 찾아드립니다.
+              AI 도구 수집, 리뷰 생성, 멀티 플랫폼 발행을 완전 자동화하는
+              오픈소스 콘텐츠 파이프라인. $0 운영비로 매일 콘텐츠를 자동 생산합니다.
             </p>
           </div>
 
@@ -56,6 +56,22 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/pricing"
+                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/newsletter"
                   className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
@@ -68,7 +84,7 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-gray-200 pt-8 dark:border-gray-800">
           <p className="text-center text-sm text-gray-500 dark:text-gray-500">
-            &copy; {new Date().getFullYear()} AI Tool Radar. All rights
+            &copy; {new Date().getFullYear()} AI Content Factory. All rights
             reserved.
           </p>
         </div>

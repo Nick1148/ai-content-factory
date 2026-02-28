@@ -4,7 +4,7 @@ import NewsletterForm from "@/components/NewsletterForm";
 export const metadata: Metadata = {
   title: "Newsletter - AI 도구 소식 구독",
   description:
-    "매주 엄선된 AI 도구 리뷰와 트렌드를 이메일로 받아보세요. AI Tool Radar 뉴스레터를 구독하세요.",
+    "매주 엄선된 AI 도구 리뷰와 트렌드를 이메일로 받아보세요. AI Content Factory 뉴스레터를 구독하세요.",
 };
 
 export default function NewsletterPage() {
@@ -12,7 +12,7 @@ export default function NewsletterPage() {
     <div className="px-4 py-20">
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-          AI Tool Radar Newsletter
+          AI Content Factory Newsletter
         </h1>
         <p className="mt-6 text-lg text-gray-600 dark:text-gray-400">
           매주 엄선된 AI 도구 리뷰, 트렌드, 그리고 실용적인 활용 팁을

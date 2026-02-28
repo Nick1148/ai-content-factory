@@ -19,14 +19,17 @@ export default async function HomePage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-blue-50 to-white px-4 pb-16 pt-20 dark:from-gray-900 dark:to-gray-950">
         <div className="mx-auto max-w-7xl text-center">
+          <div className="mb-4 inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300">
+            100% 자동화 &middot; $0 운영비 &middot; 오픈소스
+          </div>
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
-            매일 새로운{" "}
-            <span className="text-blue-600">AI 도구</span>를 발견하세요
+            AI 콘텐츠를{" "}
+            <span className="text-blue-600">자동으로</span> 생산하세요
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
-            AI Tool Radar는 최신 AI 도구를 큐레이션하고 리뷰합니다.
-            트렌딩 도구부터 숨겨진 보석까지, 당신에게 딱 맞는 AI 도구를
-            찾아보세요.
+            AI Content Factory는 AI 도구 수집, 리뷰 생성, 멀티 플랫폼 발행을
+            완전 자동화합니다. 아래는 이 시스템이 자동으로 수집하고 분석한
+            최신 AI 도구들입니다.
           </p>
           <div className="mt-8 flex justify-center">
             <NewsletterForm />

@@ -87,7 +87,7 @@ export async function sendNewsletter(
 
     try {
       await sendEmail({
-        from: 'AI Paper Daily <newsletter@aitoolradar.com>',
+        from: 'AI Paper Daily <newsletter@ai-content-factory.vercel.app>',
         to: batch,
         subject,
         html,

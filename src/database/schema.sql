@@ -142,5 +142,7 @@ CREATE POLICY "tools_service_write" ON tools FOR ALL USING (auth.role() = 'servi
 CREATE POLICY "reviews_service_write" ON reviews FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "publish_logs_service_all" ON publish_logs FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "newsletter_service_all" ON newsletter_subscribers FOR ALL USING (auth.role() = 'service_role');
+-- 뉴스레터 구독: 익명 사용자도 INSERT 가능 (이메일 구독)
+CREATE POLICY "newsletter_public_insert" ON newsletter_subscribers FOR INSERT WITH CHECK (true);
 CREATE POLICY "papers_service_write" ON papers FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "paper_explanations_service_write" ON paper_explanations FOR ALL USING (auth.role() = 'service_role');

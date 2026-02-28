@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,37 +15,39 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-content-factory.vercel.app";
+
 export const metadata: Metadata = {
   title: {
-    default: "AI Tool Radar - AI 도구 디렉토리 & 리뷰",
-    template: "%s | AI Tool Radar",
+    default: "AI Content Factory - 자동화 콘텐츠 파이프라인",
+    template: "%s | AI Content Factory",
   },
   description:
-    "매일 새로운 AI 도구를 발견하세요. 최신 AI 도구 리뷰, 비교, 트렌드를 한눈에 확인할 수 있습니다.",
+    "AI 도구 수집, 리뷰 생성, 멀티 플랫폼 발행을 완전 자동화하는 오픈소스 콘텐츠 파이프라인. $0 운영비로 매일 콘텐츠를 자동 생산합니다.",
   keywords: [
+    "AI Content Factory",
+    "AI content automation",
+    "AI 콘텐츠 자동화",
+    "content pipeline",
     "AI tools",
-    "AI 도구",
-    "인공지능",
-    "AI directory",
-    "AI review",
-    "ChatGPT",
-    "Midjourney",
-    "AI 추천",
+    "AI 도구 리뷰",
+    "automated publishing",
+    "open source",
   ],
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://aitoolradar.com",
-    siteName: "AI Tool Radar",
-    title: "AI Tool Radar - AI 도구 디렉토리 & 리뷰",
+    url: siteUrl,
+    siteName: "AI Content Factory",
+    title: "AI Content Factory - 자동화 콘텐츠 파이프라인",
     description:
-      "매일 새로운 AI 도구를 발견하세요. 최신 AI 도구 리뷰, 비교, 트렌드를 한눈에 확인할 수 있습니다.",
+      "AI 도구 수집, 리뷰 생성, 멀티 플랫폼 발행을 완전 자동화하는 오픈소스 콘텐츠 파이프라인.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Tool Radar - AI 도구 디렉토리 & 리뷰",
+    title: "AI Content Factory - 자동화 콘텐츠 파이프라인",
     description:
-      "매일 새로운 AI 도구를 발견하세요. 최신 AI 도구 리뷰, 비교, 트렌드를 한눈에 확인할 수 있습니다.",
+      "AI 도구 수집, 리뷰 생성, 멀티 플랫폼 발행을 완전 자동화하는 오픈소스 콘텐츠 파이프라인.",
   },
   robots: {
     index: true,
@@ -62,6 +65,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <GoogleAnalytics />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

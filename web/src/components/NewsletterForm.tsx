@@ -1,21 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import { subscribeNewsletter } from "@/app/newsletter/actions";
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
     setStatus("loading");
-    // Mock subscription - will be replaced with actual API
-    setTimeout(() => {
+    const result = await subscribeNewsletter(email);
+
+    if (result.success) {
       setStatus("success");
+      setMessage(result.message);
       setEmail("");
-    }, 1000);
+    } else {
+      setStatus("error");
+      setMessage(result.message);
+    }
   };
 
   return (
@@ -37,7 +44,12 @@ export default function NewsletterForm() {
       </button>
       {status === "success" && (
         <p className="text-sm text-green-600 dark:text-green-400 sm:absolute sm:mt-12">
-          Successfully subscribed!
+          {message}
+        </p>
+      )}
+      {status === "error" && (
+        <p className="text-sm text-red-600 dark:text-red-400 sm:absolute sm:mt-12">
+          {message}
         </p>
       )}
     </form>
