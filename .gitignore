@@ -5,3 +5,10 @@ dist/
 .vercel
 .next/
 *.log
+
+# bkit / Claude 내부 파일
+.bkit/
+.claude/
+docs/.bkit-memory.json
+docs/.pdca-snapshots/
+docs/.pdca-status.json
