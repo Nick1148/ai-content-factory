@@ -1,65 +1,68 @@
+import { createClient } from "@supabase/supabase-js";
 import { AITool, CategoryInfo, PaperExplanation } from "./types";
 
-// API 연동 유틸리티
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-async function fetchFromAPI<T>(path: string): Promise<T | null> {
-  if (!API_URL) return null;
-  try {
-    const res = await fetch(`${API_URL}${path}`, { next: { revalidate: 3600 } });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
+// Supabase 클라이언트 (서버 컴포넌트에서 직접 사용)
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
 }
 
-function parseJsonField<T>(value: T | string): T {
-  if (typeof value === "string") {
-    try {
-      return JSON.parse(value);
-    } catch {
-      return value as T;
-    }
-  }
-  return value;
-}
+// DB 카테고리 → 웹 카테고리 매핑
+const CATEGORY_MAP: Record<string, AITool["category"]> = {
+  "AI Agent": "chatbot",
+  "Image Gen": "image-generation",
+  "Code": "code-assistant",
+  "Productivity": "productivity",
+  "Data": "data-analysis",
+  "Other": "automation",
+};
 
-function mapToAITool(raw: Record<string, unknown>): AITool {
+type ToolRow = Record<string, unknown> & { reviews?: ReviewRow[] };
+type ReviewRow = Record<string, unknown>;
+type PaperRow = Record<string, unknown> & { paper_explanations?: ExplanationRow[] };
+type ExplanationRow = Record<string, unknown>;
+
+function mapToolRow(row: ToolRow): AITool {
+  const review: ReviewRow | null = row.reviews?.[0] ?? null;
+  const trendScore = Number(row.trend_score ?? 0);
   return {
-    slug: String(raw.slug ?? ""),
-    name: String(raw.name ?? ""),
-    tagline: String(raw.tagline ?? ""),
-    description: String(raw.description ?? ""),
-    category: raw.category as AITool["category"],
-    pricing: raw.pricing as AITool["pricing"],
-    url: String(raw.url ?? ""),
-    imageUrl: String(raw.imageUrl ?? raw.image_url ?? ""),
-    rating: Number(raw.rating ?? 0),
-    reviewCount: Number(raw.reviewCount ?? raw.review_count ?? 0),
-    launchDate: String(raw.launchDate ?? raw.launch_date ?? ""),
-    trending: Boolean(raw.trending),
-    featured: Boolean(raw.featured),
-    tags: parseJsonField<string[]>(raw.tags as string[] | string) ?? [],
-    features: parseJsonField<string[]>(raw.features as string[] | string) ?? [],
-    pros: parseJsonField<string[]>(raw.pros as string[] | string) ?? [],
-    cons: parseJsonField<string[]>(raw.cons as string[] | string) ?? [],
+    slug: String(row.slug ?? ""),
+    name: String(row.name ?? ""),
+    tagline: String(row.tagline ?? ""),
+    description: String(row.description ?? ""),
+    category: CATEGORY_MAP[String(row.category ?? "")] ?? "automation",
+    pricing: "freemium",
+    url: String(row.url ?? ""),
+    imageUrl: String(row.thumbnail_url ?? ""),
+    rating: Number(review?.rating ?? 0),
+    reviewCount: review ? 1 : 0,
+    launchDate: String(row.created_at ?? "").slice(0, 10),
+    trending: trendScore > 70,
+    featured: trendScore > 82,
+    tags: Array.isArray(row.topics) ? (row.topics as string[]) : [],
+    features: [],
+    pros: Array.isArray(review?.pros) ? (review.pros as string[]) : [],
+    cons: Array.isArray(review?.cons) ? (review.cons as string[]) : [],
   };
 }
 
-function mapToPaper(raw: Record<string, unknown>): PaperExplanation {
+function mapPaperRow(row: PaperRow): PaperExplanation {
+  const exp: ExplanationRow | null = row.paper_explanations?.[0] ?? null;
+  const cats = Array.isArray(row.categories) ? (row.categories as string[]) : [];
   return {
-    id: String(raw.id ?? ""),
-    title: String(raw.title ?? ""),
-    tldr: String(raw.tldr ?? ""),
-    summary: String(raw.summary ?? ""),
-    keyFindings: parseJsonField<string[]>((raw.keyFindings ?? raw.key_findings) as string[] | string) ?? [],
-    whyItMatters: String(raw.whyItMatters ?? raw.why_it_matters ?? ""),
-    technicalDetail: String(raw.technicalDetail ?? raw.technical_detail ?? ""),
-    category: String(raw.category ?? ""),
-    arxivUrl: String(raw.arxivUrl ?? raw.arxiv_url ?? ""),
-    publishedDate: String(raw.publishedDate ?? raw.published_date ?? ""),
-    authors: parseJsonField<string[]>(raw.authors as string[] | string) ?? [],
+    id: String(row.arxiv_id ?? row.id ?? ""),
+    title: String(row.title_ko ?? row.title ?? ""),
+    tldr: String(exp?.tldr ?? ""),
+    summary: String(exp?.summary ?? ""),
+    keyFindings: Array.isArray(exp?.key_findings) ? (exp.key_findings as string[]) : [],
+    whyItMatters: String(exp?.why_it_matters ?? ""),
+    technicalDetail: String(exp?.technical_detail ?? ""),
+    category: String(cats[0] ?? "AI"),
+    arxivUrl: String(row.arxiv_url ?? ""),
+    publishedDate: String(row.published_date ?? "").slice(0, 10),
+    authors: Array.isArray(row.authors) ? (row.authors as string[]) : [],
   };
 }
 
@@ -562,32 +565,67 @@ export const papers: PaperExplanation[] = [
   },
 ];
 
-export async function getAllPapers(): Promise<PaperExplanation[]> {
-  const data = await fetchFromAPI<Record<string, unknown>[]>("/api/papers");
-  if (data) return data.map(mapToPaper);
-  return papers;
-}
-
-export async function getPaperById(id: string): Promise<PaperExplanation | undefined> {
-  const data = await fetchFromAPI<Record<string, unknown>>(`/api/papers/${id}`);
-  if (data) return mapToPaper(data);
-  return papers.find((p) => p.id === id);
-}
-
-export function getAllPaperIds(): string[] {
-  return papers.map((p) => p.id);
-}
+const TOOL_SELECT = "*, reviews(title, summary, pros, cons, rating, content_markdown)";
+const PAPER_SELECT = "*, paper_explanations(tldr, summary, key_findings, why_it_matters, technical_detail)";
 
 export async function getAllTools(): Promise<AITool[]> {
-  const data = await fetchFromAPI<Record<string, unknown>[]>("/api/tools");
-  if (data) return data.map(mapToAITool);
+  const db = getSupabase();
+  if (db) {
+    try {
+      const { data, error } = await db
+        .from("tools")
+        .select(TOOL_SELECT)
+        .order("trend_score", { ascending: false })
+        .limit(50);
+      if (!error && data && data.length > 0) return (data as ToolRow[]).map(mapToolRow);
+    } catch { /* fall through */ }
+  }
   return tools;
 }
 
 export async function getToolBySlug(slug: string): Promise<AITool | undefined> {
-  const data = await fetchFromAPI<Record<string, unknown>>(`/api/tools/${slug}`);
-  if (data) return mapToAITool(data);
+  const db = getSupabase();
+  if (db) {
+    try {
+      const { data, error } = await db
+        .from("tools")
+        .select(TOOL_SELECT)
+        .eq("slug", slug)
+        .single();
+      if (!error && data) return mapToolRow(data as ToolRow);
+    } catch { /* fall through */ }
+  }
   return tools.find((t) => t.slug === slug);
+}
+
+export async function getAllPapers(): Promise<PaperExplanation[]> {
+  const db = getSupabase();
+  if (db) {
+    try {
+      const { data, error } = await db
+        .from("papers")
+        .select(PAPER_SELECT)
+        .order("score", { ascending: false })
+        .limit(30);
+      if (!error && data && data.length > 0) return (data as PaperRow[]).map(mapPaperRow);
+    } catch { /* fall through */ }
+  }
+  return papers;
+}
+
+export async function getPaperById(id: string): Promise<PaperExplanation | undefined> {
+  const db = getSupabase();
+  if (db) {
+    try {
+      const { data, error } = await db
+        .from("papers")
+        .select(PAPER_SELECT)
+        .eq("arxiv_id", id)
+        .single();
+      if (!error && data) return mapPaperRow(data as PaperRow);
+    } catch { /* fall through */ }
+  }
+  return papers.find((p) => p.id === id);
 }
 
 export async function getToolsByCategory(category: string): Promise<AITool[]> {
@@ -603,6 +641,10 @@ export async function getTrendingTools(): Promise<AITool[]> {
 export async function getFeaturedTools(): Promise<AITool[]> {
   const allTools = await getAllTools();
   return allTools.filter((t) => t.featured);
+}
+
+export function getAllPaperIds(): string[] {
+  return papers.map((p) => p.id);
 }
 
 export function getCategoryBySlug(slug: string): CategoryInfo | undefined {

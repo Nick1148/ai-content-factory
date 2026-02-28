@@ -196,13 +196,13 @@ export async function runDailyPipeline(): Promise<PipelineResult> {
         const reviewId = reviewIdMap.get(processed.toolName);
         if (!reviewId) continue;
 
-        // WordPress 콘텐츠를 canonical 기준으로 사용
-        const wpContent = processed.platformContents.wordpress;
+        // DEV.to 호환 영문 태그 사용, canonical URL은 미설정 (placeholder 방지)
+        const devtoContent = processed.platformContents.devto;
         const publishResult = await publishToAll({
           title: processed.review.title,
           contentMarkdown: processed.review.content,
-          tags: wpContent.tags,
-          canonicalUrl: wpContent.canonicalUrl,
+          tags: devtoContent.tags,
+          canonicalUrl: undefined,
         });
 
         // 발행 로그 DB 저장

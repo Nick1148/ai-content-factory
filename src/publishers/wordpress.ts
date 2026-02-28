@@ -18,6 +18,7 @@ interface WPTagResponse {
 
 async function getOrCreateTags(tags: string[]): Promise<number[]> {
   const { url, username, password } = config.publishers.wordpress;
+  const apiBase = getApiBase(url);
   const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
   const tagIds: number[] = [];
 
@@ -25,7 +26,7 @@ async function getOrCreateTags(tags: string[]): Promise<number[]> {
     try {
       // 기존 태그 검색
       const searchRes = await fetch(
-        `${url}/wp-json/wp/v2/tags?search=${encodeURIComponent(tagName)}`,
+        `${apiBase}/tags?search=${encodeURIComponent(tagName)}`,
         { headers: { Authorization: authHeader } },
       );
 
@@ -39,7 +40,7 @@ async function getOrCreateTags(tags: string[]): Promise<number[]> {
       }
 
       // 새 태그 생성
-      const createRes = await fetch(`${url}/wp-json/wp/v2/tags`, {
+      const createRes = await fetch(`${apiBase}/tags`, {
         method: 'POST',
         headers: {
           Authorization: authHeader,
@@ -60,6 +61,15 @@ async function getOrCreateTags(tags: string[]): Promise<number[]> {
   return tagIds;
 }
 
+function getApiBase(wpUrl: string): string {
+  // WordPress.com 호스팅 감지 → public-api 사용
+  const hostname = new URL(wpUrl).hostname;
+  if (hostname.endsWith('.wordpress.com')) {
+    return `https://public-api.wordpress.com/wp/v2/sites/${hostname}`;
+  }
+  return `${wpUrl}/wp-json/wp/v2`;
+}
+
 export async function publishToWordPress(input: PublishInput): Promise<PublishResult> {
   const { url: wpUrl, username, password } = config.publishers.wordpress;
 
@@ -76,10 +86,11 @@ export async function publishToWordPress(input: PublishInput): Promise<PublishRe
   try {
     console.log('[WordPress] 발행 시작...');
 
+    const apiBase = getApiBase(wpUrl);
     const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
     const tagIds = await getOrCreateTags(input.tags);
 
-    const response = await fetch(`${wpUrl}/wp-json/wp/v2/posts`, {
+    const response = await fetch(`${apiBase}/posts`, {
       method: 'POST',
       headers: {
         Authorization: authHeader,
