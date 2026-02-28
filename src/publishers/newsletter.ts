@@ -87,7 +87,7 @@ export async function sendNewsletter(
 
     try {
       await sendEmail({
-        from: 'AI Paper Daily <newsletter@aitoolradar.com>',
+        from: '논문읽어주는AI <newsletter@paper-reader.ai>',
         to: batch,
         subject,
         html,

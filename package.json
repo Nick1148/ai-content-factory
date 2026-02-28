@@ -1,7 +1,7 @@
 {
-  "name": "ai-content-factory",
+  "name": "논문읽어주는ai",
   "version": "0.1.0",
-  "description": "AI Content Factory - 완전 자동화 멀티채널 콘텐츠 시스템",
+  "description": "논문읽어주는AI - 최신 AI/ML 논문을 매일 수집하고 한국어로 해설하는 자동화 서비스",
   "type": "module",
   "scripts": {
     "dev": "node --env-file=.env node_modules/tsx/dist/cli.mjs watch src/index.ts",
@@ -9,16 +9,12 @@
     "start": "node dist/index.js",
     "collect": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/collectors/index.ts",
     "generate": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/ai/index.ts",
-    "publish": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/publishers/index.ts",
-    "pipeline": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts",
-    "pipeline:papers": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts --papers",
-    "pipeline:full": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts --full"
+    "pipeline": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@hono/node-server": "^1.0.0",
     "@supabase/supabase-js": "^2.45.0",
-    "graphql-request": "^7.0.0",
     "hono": "^4.0.0"
   },
   "devDependencies": {

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://aitoolradar.com/sitemap.xml",
+    sitemap: "https://논문읽어주는ai.com/sitemap.xml",
   };
 }

@@ -1,8 +1,23 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPaperById, getAllPaperIds } from "@/lib/data";
+import { getPaperById, getAllPaperIds, getAllPapers } from "@/lib/data";
 import { PaperExplanation } from "@/lib/types";
+import ShareButtonsWrapper from "./share-buttons-wrapper";
+import AdSlot from "@/components/AdSlot";
+import PaperCard from "@/components/PaperCard";
+
+// 카테고리별 색상
+const categoryColors: Record<string, string> = {
+  "cs.AI": "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+  "cs.LG": "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+  "cs.CL": "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+  "cs.CV": "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
+  "stat.ML": "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400",
+  "cs.RO": "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+  "cs.NE": "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
+  "cs.IR": "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+};
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -17,7 +32,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const paper = await getPaperById(id);
-  if (!paper) return { title: "Paper Not Found" };
+  if (!paper) return { title: "논문을 찾을 수 없습니다" };
 
   return {
     title: `${paper.title} - AI 논문 해설`,
@@ -64,6 +79,14 @@ export default async function PaperDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  // 관련 논문 추천 (같은 카테고리의 다른 논문)
+  const allPapers = await getAllPapers();
+  const relatedPapers = allPapers
+    .filter((p) => p.id !== paper.id && p.category === paper.category)
+    .slice(0, 3);
+
+  const catColor = categoryColors[paper.category] ?? "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400";
+
   return (
     <>
       <JsonLd paper={paper} />
@@ -76,14 +99,14 @@ export default async function PaperDetailPage({ params }: PageProps) {
               href="/"
               className="hover:text-gray-900 dark:hover:text-white"
             >
-              Home
+              홈
             </Link>
             <span>/</span>
             <Link
               href="/papers"
               className="hover:text-gray-900 dark:hover:text-white"
             >
-              Papers
+              논문
             </Link>
             <span>/</span>
             <span className="truncate text-gray-900 dark:text-white">
@@ -96,14 +119,16 @@ export default async function PaperDetailPage({ params }: PageProps) {
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3">
-              <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-medium ${catColor}`}
+              >
                 {paper.category}
               </span>
               <time className="text-sm text-gray-500 dark:text-gray-500">
                 {paper.publishedDate}
               </time>
             </div>
-            <h1 className="mt-4 text-2xl font-bold leading-tight text-gray-900 dark:text-white sm:text-3xl">
+            <h1 className="mt-4 text-2xl font-bold leading-tight text-gray-900 dark:text-white sm:text-3xl" style={{ lineHeight: "1.4" }}>
               {paper.title}
             </h1>
             <p className="mt-3 text-sm text-gray-500 dark:text-gray-500">
@@ -111,30 +136,35 @@ export default async function PaperDetailPage({ params }: PageProps) {
             </p>
           </div>
 
+          {/* 공유 버튼 */}
+          <div className="mb-8">
+            <ShareButtonsWrapper title={paper.title} paperId={paper.id} />
+          </div>
+
           {/* TL;DR */}
           <div className="mb-10 rounded-xl border-l-4 border-blue-500 bg-blue-50 p-6 dark:bg-blue-900/10">
             <p className="text-sm font-semibold text-blue-800 dark:text-blue-400">
               TL;DR
             </p>
-            <p className="mt-2 text-sm leading-relaxed text-blue-900 dark:text-blue-300">
+            <p className="mt-2 text-sm leading-relaxed text-blue-900 dark:text-blue-300" style={{ lineHeight: "1.8" }}>
               {paper.tldr}
             </p>
           </div>
 
-          {/* Summary */}
+          {/* 요약 */}
           <section className="mb-10">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Summary
+              요약
             </h2>
-            <p className="mt-4 leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mt-4 leading-relaxed text-gray-600 dark:text-gray-400" style={{ lineHeight: "1.8" }}>
               {paper.summary}
             </p>
           </section>
 
-          {/* Key Findings */}
+          {/* 핵심 발견 */}
           <section className="mb-10">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Key Findings
+              핵심 발견
             </h2>
             <ul className="mt-4 space-y-3">
               {paper.keyFindings.map((finding, i) => (
@@ -142,7 +172,7 @@ export default async function PaperDetailPage({ params }: PageProps) {
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                     {i + 1}
                   </span>
-                  <span className="text-gray-700 dark:text-gray-300">
+                  <span className="text-gray-700 dark:text-gray-300" style={{ lineHeight: "1.7" }}>
                     {finding}
                   </span>
                 </li>
@@ -150,29 +180,32 @@ export default async function PaperDetailPage({ params }: PageProps) {
             </ul>
           </section>
 
-          {/* Why It Matters */}
+          {/* 왜 중요한가 */}
           <section className="mb-10">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Why It Matters
+              왜 중요한가
             </h2>
-            <p className="mt-4 leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mt-4 leading-relaxed text-gray-600 dark:text-gray-400" style={{ lineHeight: "1.8" }}>
               {paper.whyItMatters}
             </p>
           </section>
 
-          {/* Technical Detail */}
+          {/* 기술 상세 */}
           <section className="mb-10">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Technical Details
+              기술 상세
             </h2>
             <div className="mt-4 rounded-xl bg-gray-50 p-6 dark:bg-gray-900/50">
-              <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+              <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300" style={{ lineHeight: "1.8" }}>
                 {paper.technicalDetail}
               </p>
             </div>
           </section>
 
-          {/* arXiv Link */}
+          {/* 광고 슬롯 */}
+          <AdSlot className="mb-10" />
+
+          {/* arXiv 링크 */}
           <div className="mb-10 flex items-center gap-4">
             <a
               href={paper.arxivUrl}
@@ -202,6 +235,20 @@ export default async function PaperDetailPage({ params }: PageProps) {
               목록으로 돌아가기
             </Link>
           </div>
+
+          {/* 관련 논문 */}
+          {relatedPapers.length > 0 && (
+            <section className="border-t border-gray-200 pt-10 dark:border-gray-800">
+              <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
+                관련 논문
+              </h2>
+              <div className="space-y-4">
+                {relatedPapers.map((p) => (
+                  <PaperCard key={p.id} paper={p} />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </article>
     </>

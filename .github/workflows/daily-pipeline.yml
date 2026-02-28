@@ -1,4 +1,4 @@
-name: Daily AI Pipeline
+name: Daily Paper Pipeline
 
 on:
   schedule:
@@ -29,23 +29,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run full pipeline (tools + papers)
+      - name: Run paper pipeline
         env:
-          PRODUCTHUNT_TOKEN: ${{ secrets.PRODUCTHUNT_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
-          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
-          HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
-          HASHNODE_PUBLICATION_ID: ${{ secrets.HASHNODE_PUBLICATION_ID }}
-          WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
-          WORDPRESS_USERNAME: ${{ secrets.WORDPRESS_USERNAME }}
-          WORDPRESS_APP_PASSWORD: ${{ secrets.WORDPRESS_APP_PASSWORD }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
           touch .env
-          npm run pipeline:full
+          npm run pipeline

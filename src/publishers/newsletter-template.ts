@@ -89,12 +89,12 @@ export function generateEmailHtml(papers: PaperForEmail[]): string {
           <tr>
             <td style="padding: 24px 32px; background-color: #f9fafb; border-radius: 0 0 12px 12px; border-top: 1px solid #e5e7eb; text-align: center;">
               <p style="margin: 0 0 8px 0; font-size: 12px; color: #9ca3af;">
-                AI Tool Radar | AI Paper Daily Newsletter
+                논문읽어주는AI | AI Paper Daily Newsletter
               </p>
               <p style="margin: 0; font-size: 12px; color: #9ca3af;">
-                <a href="https://aitoolradar.com/newsletter" style="color: #6b7280; text-decoration: underline;">구독 설정 변경</a>
+                <a href="#" style="color: #6b7280; text-decoration: underline;">구독 설정 변경</a>
                 &nbsp;&middot;&nbsp;
-                <a href="https://aitoolradar.com" style="color: #6b7280; text-decoration: underline;">웹사이트 방문</a>
+                <a href="#" style="color: #6b7280; text-decoration: underline;">웹사이트 방문</a>
               </p>
             </td>
           </tr>

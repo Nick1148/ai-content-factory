@@ -16,35 +16,37 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "AI Tool Radar - AI 도구 디렉토리 & 리뷰",
-    template: "%s | AI Tool Radar",
+    default: "논문읽어주는AI - 최신 AI 논문을 5분 만에",
+    template: "%s | 논문읽어주는AI",
   },
   description:
-    "매일 새로운 AI 도구를 발견하세요. 최신 AI 도구 리뷰, 비교, 트렌드를 한눈에 확인할 수 있습니다.",
+    "매일 최신 AI 논문을 5분 만에 이해할 수 있는 한국어 해설. arXiv 논문 리뷰, 핵심 요약, 기술 분석을 제공합니다.",
   keywords: [
-    "AI tools",
-    "AI 도구",
+    "AI 논문",
+    "arXiv",
+    "논문 해설",
+    "논문 리뷰",
     "인공지능",
-    "AI directory",
-    "AI review",
-    "ChatGPT",
-    "Midjourney",
-    "AI 추천",
+    "머신러닝",
+    "딥러닝",
+    "한국어 논문 요약",
+    "LLM",
+    "컴퓨터 비전",
   ],
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://aitoolradar.com",
-    siteName: "AI Tool Radar",
-    title: "AI Tool Radar - AI 도구 디렉토리 & 리뷰",
+    url: "https://논문읽어주는ai.com",
+    siteName: "논문읽어주는AI",
+    title: "논문읽어주는AI - 최신 AI 논문을 5분 만에",
     description:
-      "매일 새로운 AI 도구를 발견하세요. 최신 AI 도구 리뷰, 비교, 트렌드를 한눈에 확인할 수 있습니다.",
+      "매일 최신 AI 논문을 5분 만에 이해할 수 있는 한국어 해설. arXiv 논문 리뷰, 핵심 요약, 기술 분석을 제공합니다.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Tool Radar - AI 도구 디렉토리 & 리뷰",
+    title: "논문읽어주는AI - 최신 AI 논문을 5분 만에",
     description:
-      "매일 새로운 AI 도구를 발견하세요. 최신 AI 도구 리뷰, 비교, 트렌드를 한눈에 확인할 수 있습니다.",
+      "매일 최신 AI 논문을 5분 만에 이해할 수 있는 한국어 해설. arXiv 논문 리뷰, 핵심 요약, 기술 분석을 제공합니다.",
   },
   robots: {
     index: true,
