@@ -12,7 +12,8 @@
     "publish": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/publishers/index.ts",
     "pipeline": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts",
     "pipeline:papers": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts --papers",
-    "pipeline:full": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts --full"
+    "pipeline:full": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/pipeline.ts --full",
+    "check:db": "node --env-file=.env node_modules/tsx/dist/cli.mjs scripts/check-db.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

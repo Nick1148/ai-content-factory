@@ -9,7 +9,8 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return getAllPaperIds().map((id) => ({ id }));
+  const ids = await getAllPaperIds();
+  return ids.map((id) => ({ id }));
 }
 
 export async function generateMetadata({

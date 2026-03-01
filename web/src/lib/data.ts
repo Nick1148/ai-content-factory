@@ -643,8 +643,9 @@ export async function getFeaturedTools(): Promise<AITool[]> {
   return allTools.filter((t) => t.featured);
 }
 
-export function getAllPaperIds(): string[] {
-  return papers.map((p) => p.id);
+export async function getAllPaperIds(): Promise<string[]> {
+  const allPapers = await getAllPapers();
+  return allPapers.map((p) => p.id);
 }
 
 export function getCategoryBySlug(slug: string): CategoryInfo | undefined {
@@ -655,8 +656,9 @@ export function getAllCategories(): CategoryInfo[] {
   return categories;
 }
 
-export function getAllSlugs(): string[] {
-  return tools.map((t) => t.slug);
+export async function getAllSlugs(): Promise<string[]> {
+  const allTools = await getAllTools();
+  return allTools.map((t) => t.slug);
 }
 
 export function getAllCategorySlugs(): string[] {
