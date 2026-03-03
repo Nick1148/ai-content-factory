@@ -75,7 +75,7 @@ const plans = [
       "커뮤니티 지원 (GitHub Issues)",
     ],
     cta: "GitHub에서 시작하기",
-    ctaHref: "https://github.com",
+    ctaHref: "https://github.com/Nick1148/ai-content-factory",
     ctaExternal: true,
   },
   {
@@ -96,7 +96,7 @@ const plans = [
       "우선 이메일 지원",
     ],
     cta: "Pro 시작하기",
-    ctaHref: "#",
+    ctaHref: "/newsletter",
     ctaExternal: false,
   },
   {
@@ -116,7 +116,7 @@ const plans = [
       "30일 무료 기술 지원",
     ],
     cta: "문의하기",
-    ctaHref: "mailto:contact@ai-content-factory.com",
+    ctaHref: "mailto:goaniklee@gmail.com",
     ctaExternal: true,
   },
 ] as const;
@@ -390,7 +390,7 @@ export default function PricingPage() {
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="https://github.com"
+              href="https://github.com/Nick1148/ai-content-factory"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
@@ -401,7 +401,7 @@ export default function PricingPage() {
               GitHub에서 시작하기
             </a>
             <a
-              href="mailto:contact@ai-content-factory.com"
+              href="mailto:goaniklee@gmail.com"
               className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
               문의하기

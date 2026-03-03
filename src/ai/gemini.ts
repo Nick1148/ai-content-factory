@@ -58,9 +58,13 @@ async function callGeminiJson(prompt: string): Promise<string> {
 const VALID_CATEGORIES: ToolCategory[] = [
   'AI Agent',
   'Image Gen',
+  'Video Gen',
+  'Audio',
   'Code',
   'Productivity',
   'Data',
+  'Design',
+  'Text Gen',
   'Other',
 ];
 
@@ -74,10 +78,14 @@ export async function categorize(tool: CollectedTool): Promise<ToolCategory> {
 
 카테고리 목록 (반드시 아래 중 하나만 선택):
 - AI Agent: 자율 에이전트, 워크플로우 자동화, 챗봇
-- Image Gen: 이미지 생성, 편집, 비디오 생성
+- Image Gen: 이미지 생성, 편집
+- Video Gen: 비디오 생성, 영상 편집
+- Audio: 음악 생성, 오디오 처리, TTS
 - Code: 코드 생성, IDE 플러그인, 개발자 도구
 - Productivity: 생산성, 문서 작성, 노트, 프로젝트 관리
 - Data: 데이터 분석, ML 파이프라인, 데이터 시각화
+- Design: UI/UX 디자인, 그래픽 디자인
+- Text Gen: 텍스트 생성, 카피라이팅, 번역
 - Other: 위 카테고리에 해당하지 않는 도구
 
 카테고리 이름만 정확히 출력하세요. 설명 없이 카테고리 이름만 답변하세요.`;

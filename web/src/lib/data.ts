@@ -13,9 +13,13 @@ function getSupabase() {
 const CATEGORY_MAP: Record<string, AITool["category"]> = {
   "AI Agent": "chatbot",
   "Image Gen": "image-generation",
+  "Video Gen": "video-generation",
+  "Audio": "audio",
   "Code": "code-assistant",
   "Productivity": "productivity",
   "Data": "data-analysis",
+  "Design": "design",
+  "Text Gen": "text-generation",
   "Other": "automation",
 };
 

@@ -68,7 +68,7 @@ export async function generateReview(tool: CollectedTool): Promise<GeneratedRevi
       cons: ['추가 리뷰가 필요합니다'],
       useCases: ['AI 도구 활용'],
       alternatives: [],
-      rating: 5.0,
+      rating: 3.0,
       content: `## ${tool.name}\n\n${tool.description || tool.tagline}\n\n자세한 리뷰를 생성하지 못했습니다. 도구 페이지를 직접 방문해주세요: ${tool.url}`,
     };
   }

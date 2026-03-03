@@ -128,14 +128,15 @@ export async function runDailyPipeline(): Promise<PipelineResult> {
       for (const processed of processedContents) {
         // 도구 저장
         const slug = slugify(processed.toolName);
+        const originalTool = collectedTools.find(t => t.name === processed.toolName);
         const savedTool = await saveTool({
           slug,
           name: processed.toolName,
           tagline: processed.review.summary,
           description: processed.review.content.slice(0, 500),
           category: processed.category,
-          source: 'producthunt',
-          url: '',
+          source: originalTool?.source ?? 'producthunt',
+          url: originalTool?.url ?? '',
           trend_score: processed.trendScore,
         });
 

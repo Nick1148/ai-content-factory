@@ -7,9 +7,13 @@ export type Platform = 'medium' | 'devto' | 'hashnode' | 'wordpress';
 export type ToolCategory =
   | 'AI Agent'
   | 'Image Gen'
+  | 'Video Gen'
+  | 'Audio'
   | 'Code'
   | 'Productivity'
   | 'Data'
+  | 'Design'
+  | 'Text Gen'
   | 'Other';
 
 export interface GeneratedReview {
