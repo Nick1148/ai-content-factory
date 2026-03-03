@@ -119,3 +119,10 @@ cd web && npm run dev
 - 함수명/변수명: camelCase
 - 타입명: PascalCase
 - 주석 및 로그: 한국어
+
+## 관련 프로젝트
+
+| 프로젝트 | Repo | 설명 |
+|----------|------|------|
+| AI Content Factory | [Nick1148/ai-content-factory](https://github.com/Nick1148/ai-content-factory) | AI 도구 + 논문 통합 상품화 버전 (이 repo) |
+| 논문읽어주는AI | [Nick1148/paper-reviewer-ai](https://github.com/Nick1148/paper-reviewer-ai) | 논문 해설 전용 서비스 (2026-03-03 분리) |
